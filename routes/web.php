@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Question;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -25,7 +26,16 @@ use Inertia\Inertia;
 // });
 
 Route::get('/', fn() => Inertia::render('Home'))->name('home');
-Route::get('/about', fn() => Inertia::render('About'))->name('about');
+
+Route::get('/about', function () {
+    $questions = Question::all(); // You can add pagination or filtering here
+
+    return Inertia::render('About', [
+        'questions' => $questions
+    ]);
+})->name('about');
+
+Route::get('/Practice', fn() => Inertia::render('Exam'))->name('exam');
 
 
 require __DIR__.'/auth.php';
