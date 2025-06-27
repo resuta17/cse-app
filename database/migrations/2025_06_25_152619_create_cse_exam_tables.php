@@ -30,6 +30,7 @@ return new class extends Migration {
             $table->foreignId('question_id')->constrained()->onDelete('cascade');
             $table->text('choice_text');
             $table->boolean('is_correct')->default(false);
+            $table->text('explanation');
             $table->timestamps();
         });
     }

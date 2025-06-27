@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Question;
+use App\Models\Category;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -35,7 +36,23 @@ Route::get('/about', function () {
     ]);
 })->name('about');
 
-Route::get('/Practice', fn() => Inertia::render('Exam'))->name('exam');
+Route::get('/Practice', function () {
+    $categories = Category::all(); // You can add pagination or filtering here
+
+    return Inertia::render('Exam', [
+        'categories' => $categories
+    ]);
+})->name('exam');
+
+
+Route::get('/Examination', function () {
+    $name = request('name');
+    $category = Category::where('name', $name)->firstOrFail();
+    return Inertia::render('Examination', [
+        'categories' => $category
+    ]);
+})->name('practice');
+//Route::get('/Practice', fn() => Inertia::render('Exam'))->name('exam');
 
 
 require __DIR__.'/auth.php';

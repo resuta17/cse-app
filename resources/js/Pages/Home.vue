@@ -18,19 +18,28 @@ const goToExam = () => {
         
        
     <div class="p-4 rounded">
+        <div class="grid grid-cols gap-4 items-center">
+            <div>
+                <p class="text-black text-xl font-semibold mt-20">
+                    Take our 
+                    <span class="text-blue-600">free Civil Service Exam</span> 
+                    practice tests online — 
+                    <span class="text-red-600">no ads, no paywall, and no account required</span>. 
+                    Just real questions to help you 
+                    <span class="text-blue-600">pass with confidence</span>.
+                </p>
 
-            <p class="font-black text-black text-2xl mt-5">
-                Take our 
-                <span class="text-blue-600 font-semibold">free Civil Service Exam</span> 
-                practice tests online. 
-                <span class="text-red-600 font-semibold">No ads, no paywall</span> — just real questions to help you 
-                <span class="text-blue-600 font-semibold">pass with confidence</span>.
-            </p>
-
-            <p class="mt-10 mb-2 text-lg font-extrabold  text-black tracking-wid">Test your knowledge now</p>
-            <PrimaryButton @click="goToExam">Take the Exam</PrimaryButton>
+            </div>
+            <div class="flex items-center justify-center mt-10">
+                <div>
+                    <!-- <p class="mt-10 mb-2 text-lg font-extrabold  text-black tracking-wid">Test your knowledge now</p> -->
+                    <PrimaryButton @click="goToExam">Take the Exam</PrimaryButton>
+                </div>
+              
+            </div>     
+        </div>            
     </div>
-    <div class="p-4 rounded">
+    <div class="p-4 rounded bg-white shadow-2xl border border-gray-200">
             
     </div>
     </main>
