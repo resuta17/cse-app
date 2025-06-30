@@ -47,9 +47,10 @@ Route::get('/Practice', function () {
 
 Route::get('/Examination', function () {
     $name = request('name');
+    $id = request('id');
 
     $questions = Question::with('choices')
-    ->where('category_id', $name)
+    ->where('category_id', $id)
     ->inRandomOrder()
     ->limit(20)
     ->get()
@@ -58,7 +59,7 @@ Route::get('/Examination', function () {
     });
 
 
-     return Inertia::render('Examination', compact('name', 'questions'));
+     return Inertia::render('Examination', compact('id','name', 'questions'));
 })->name('practice');
 //Route::get('/Practice', fn() => Inertia::render('Exam'))->name('exam');
 

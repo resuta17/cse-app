@@ -8,10 +8,9 @@ defineProps({
   categories: Array
 })
 
-let cat = ""
 
-const TakeExamination = (cat) => {
-  router.visit(route('practice', { name: cat }));
+const TakeExamination = (cat, catID) => {
+  router.visit(route('practice', { name: cat ,id: catID}));
 };
 
 </script>
@@ -21,7 +20,7 @@ const TakeExamination = (cat) => {
     <div class="min-h-screen">
         <div><p>Select a category to boost your confidence and exam readiness.</p></div>
         <div  class="flex items-center mt-20 justify-center space-x-2">
-            <SecondaryButton v-for="category in categories" @click="TakeExamination(category.id)">{{ category.name }}</SecondaryButton>
+            <SecondaryButton v-for="category in categories" @click="TakeExamination( category.name ,category.id)">{{ category.name }}</SecondaryButton>
         </div>
         <div class="flex items-center mt-5 justify-center space-x-2">
             <SecondaryButton>Prof</SecondaryButton>
