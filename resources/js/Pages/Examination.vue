@@ -2,11 +2,15 @@
 import Header from '@/Layouts/Header.vue'
 import Footer from '@/Layouts/Footer.vue'
 import { onMounted, ref, reactive, computed } from 'vue'
+import { router } from '@inertiajs/vue3';
 
 
 const correctAnswers = ref([])
 const selectedAnswers = reactive({})
 const currentQuestion = ref(0)
+const done = ref(false)
+
+
 
 const score = computed(() => {
   if (!correctAnswers.value || !Array.isArray(correctAnswers.value)) return 0
@@ -18,11 +22,15 @@ const score = computed(() => {
 
 const totalAnswered = computed(() => Object.keys(selectedAnswers).length)
 
-const wrong = computed(() => totalAnswered.value - correct.value)
+const wrong = computed(() => totalAnswered.value - score.value)
 
 const unanswered = computed(() => correctAnswers.value.length - totalAnswered.value)
 
+const correctPercentage =  computed(() =>(score.value / props.questions.length) * 100)
 
+const TakeExamination = (cat, catID) => {
+  router.visit(route('practice', { name: cat ,id: catID}));
+};
 
 const props = defineProps({
   questions: Array,
@@ -31,15 +39,18 @@ const props = defineProps({
 })
 
 
+
 function addAnswer(id, value) {
   correctAnswers.value.push({ id, value })
 }
 
 function next() {
-    currentQuestion.value++;
-    
+    currentQuestion.value++
 }
 
+function finish() {
+   done.value = true;
+}
 
 onMounted(() => {
   props.questions.forEach(question => {
@@ -49,7 +60,6 @@ onMounted(() => {
       }
     })
   })
-  
 })
 
 
@@ -57,9 +67,10 @@ onMounted(() => {
 
 <template>
   <Header />
+
   <div class="bg-gray-100 h-screen">
      <div class=" flex justify-center items bg-gray-100">
-       <div class=" md:w-[65%] sm:w-[90%] bg-white border shadow-lg rounded border-l-4 mt-10 mb-10">
+       <div class=" md:w-[65%] sm:w-[90%] bg-white border shadow-lg rounded border-l-4 mt-10 mb-10" v-show="done === false">
           <div class="grid grid-flow-col auto-cols-fr w-full h-2 rounded overflow-hidden">
             <div class="bg-blue-300 h-full" :style="{ width: (totalAnswered*5) + '%' }"></div> 
           </div>
@@ -67,16 +78,12 @@ onMounted(() => {
              <p class="mt-2">Question {{ currentQuestion + 1 }} of {{ questions.length }}</p>
           </div>
            
-          <div class="px-10 pb-16 pt-6">
-             
+          <div class="px-10 pb-16 pt-6">      
               <div>
-                
                 <p class=" text-2xl font-extrabold text-center mb-4">{{ name }}</p>
                 <hr class="mb-10">
-            
               <div v-if="question = questions[currentQuestion]">
                 <p class="font-semibold mb-4">{{ currentQuestion + 1 }}. {{ question.question_text }}</p>
-
                 <div
                   v-for="choice in question.choices"
                   :key="choice.id"
@@ -97,10 +104,13 @@ onMounted(() => {
                   <label>{{ choice.choice_text }}</label>
                 </div>
                 
-                <div v-show="selectedAnswers[question.id] !== undefined" class="my-8 flex justify-end space-x-4 px-2">
-                  <button @click="next" :disabled="selectedAnswers[question.id] === undefined"
+                <div  class="my-8 flex justify-end space-x-4 px-2">
+                  <button v-show="selectedAnswers[question.id] !== undefined && questions.length !== totalAnswered" @click="next" :disabled="selectedAnswers[question.id] === undefined "
                   class="bg-green-600  border-green-100 py-1 px-4 rounded shadow-sm border text-white"
-                  >Next</button>
+                  > Next </button>
+                  <button v-show=" questions.length === totalAnswered"
+                  class="bg-green-600  border-green-100 py-1 px-4 rounded shadow-sm border text-white" @click="finish"
+                  > Finish </button>
                 </div>
             
                 <div v-show="selectedAnswers[question.id] !== undefined">
@@ -113,42 +123,30 @@ onMounted(() => {
               </div>
           </div>
        </div>
-        
+       
+       <div class="md:w-[65%]  md:h-[90%] sm:w-[90%] bg-white border shadow-lg rounded border-l-4 mt-10 mb-10 flex justify-center items-center p-10" v-show="done===true">
+            <div>
+                <h2 class="text-2xl font-bold text-blue-600 mb-4 text-center">{{name}} Category Results</h2>
+            
+                <p class="text-gray-700 text-lg text-center">
+                  You scored: <span class="font-semibold text-red-600"> {{ score }}</span> out of <span class="font-semibold text-black">{{questions.length}}</span>
+                </p>
+                
+                <p class="text-gray-700 text-lg mt-2 text-center">
+                  Percentage: <span class="font-semibold text-green-600">{{ correctPercentage }}%</span>
+                </p>
+
+                <p class="mt-4 text-sm text-gray-500 italic">
+                  Keep practicing to improve your {{name.toLowerCase()}} skills!
+                </p>
+                <div class="mt-4">
+                    <button @click="TakeExamination( name ,id)">{{ name }}</button>
+                </div>
+            </div>
+       </div>
     </div>
-    
   </div>
  
-  
-<!-- <div v-for="(question, index) in questions" :key="question.id" class="mb-6 px-40 py-5">
-  <p class="font-semibold mb-2">{{ index + 1 }}. {{ question.question_text }}</p>
-
-  <div
-    v-for="choice in question.choices"
-    :key="choice.id"
-    class="flex items-start space-x-2 mb-1"
-    :class="{
-      'bg-green-100 border-l-4 border-green-500 px-2 py-1 rounded': selectedAnswers[question.id] !== undefined && choice.is_correct,
-      'bg-red-100 border-l-4 border-red-500 px-2 py-1 rounded': selectedAnswers[question.id] === choice.id && !choice.is_correct
-    }"
-  >
-    <input
-      type="radio"
-      :name="'question_' + question.id"
-      :value="choice.id"
-      v-model="selectedAnswers[question.id]"
-      :disabled="selectedAnswers[question.id] !== undefined"
-      class="mt-1"
-    />
-    <label>{{ choice.choice_text }}</label>
-  </div>
-
-  <div class="p-10" v-if="selectedAnswers[question.id] !== undefined">
-    <p v-if="question.choices.find(c => c.is_correct)?.explanation" class="text-sm text-gray-700 mt-1 bg-gray-200">
-      💡 Explanation:
-      {{ question.choices.find(c => c.is_correct)?.explanation }}
-    </p>
-  </div>
-</div> -->
 
  <Footer />
 </template>
