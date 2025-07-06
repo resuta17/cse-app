@@ -11,6 +11,11 @@ const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
+    <div class="grid grid-flow-col auto-cols-fr mt-2">
+            <div class="bg-blue-900 h-2"></div>
+            <div class="bg-red-600 h-2"></div>
+            <div class="bg-blue-900 h-2"></div>
+    </div>
     <div>
         <div class="min-h-screen bg-gray-100">
             <nav
@@ -38,6 +43,12 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin')"
+                                    :active="route().current('admin')"
+                                >
+                                    Admin
                                 </NavLink>
                             </div>
                         </div>

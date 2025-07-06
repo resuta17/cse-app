@@ -10,7 +10,9 @@ const selectedAnswers = reactive({})
 const currentQuestion = ref(0)
 const done = ref(false)
 
+const totalAnswered = computed(() => Object.keys(selectedAnswers).length)
 
+const correctPercentage =  computed(() =>(score.value / props.questions.length) * 100)
 
 const score = computed(() => {
   if (!correctAnswers.value || !Array.isArray(correctAnswers.value)) return 0
@@ -19,14 +21,6 @@ const score = computed(() => {
     return selectedAnswers[correct.id] === correct.value
   }).length
 })
-
-const totalAnswered = computed(() => Object.keys(selectedAnswers).length)
-
-const wrong = computed(() => totalAnswered.value - score.value)
-
-const unanswered = computed(() => correctAnswers.value.length - totalAnswered.value)
-
-const correctPercentage =  computed(() =>(score.value / props.questions.length) * 100)
 
 const TakeExamination = (cat, catID) => {
   router.visit(route('practice', { name: cat ,id: catID}));
@@ -37,8 +31,6 @@ const props = defineProps({
   name: String,
   id: String
 })
-
-
 
 function addAnswer(id, value) {
   correctAnswers.value.push({ id, value })
@@ -68,7 +60,7 @@ onMounted(() => {
 <template>
   <Header />
 
-  <div class="bg-gray-100 h-screen">
+  <div class="bg-gray-100 h-screen mb-4">
      <div class=" flex justify-center items bg-gray-100">
        <div class=" md:w-[65%] sm:w-[90%] bg-white border shadow-lg rounded border-l-4 mt-10 mb-10" v-show="done === false">
           <div class="grid grid-flow-col auto-cols-fr w-full h-2 rounded overflow-hidden">
@@ -81,8 +73,10 @@ onMounted(() => {
           <div class="px-10 pb-16 pt-6">      
               <div>
                 <p class=" text-2xl font-extrabold text-center mb-4">{{ name }}</p>
-                <hr class="mb-10">
+                <hr class="mb-2">
+             
               <div v-if="question = questions[currentQuestion]">
+                <p class="mb-10"><span class="font-bold">Direction: </span><span>{{ question.direction }}</span></p>
                 <p class="font-semibold mb-4">{{ currentQuestion + 1 }}. {{ question.question_text }}</p>
                 <div
                   v-for="choice in question.choices"
@@ -126,7 +120,7 @@ onMounted(() => {
        
        <div class="md:w-[65%]  md:h-[90%] sm:w-[90%] bg-white border shadow-lg rounded border-l-4 mt-10 mb-10 flex justify-center items-center p-10" v-show="done===true">
             <div>
-                <h2 class="text-2xl font-bold text-blue-600 mb-4 text-center">{{name}} Category Results</h2>
+                <h2 class="text-2xl font-bold text-blue-600 mb-4 text-center">{{ name }} Category Results</h2>
             
                 <p class="text-gray-700 text-lg text-center">
                   You scored: <span class="font-semibold text-red-600"> {{ score }}</span> out of <span class="font-semibold text-black">{{questions.length}}</span>
@@ -137,7 +131,7 @@ onMounted(() => {
                 </p>
 
                 <p class="mt-4 text-sm text-gray-500 italic">
-                  Keep practicing to improve your {{name.toLowerCase()}} skills!
+                  Keep practicing to improve your {{ name.toLowerCase() }} skills!
                 </p>
                 <div class="mt-4">
                     <button @click="TakeExamination( name ,id)">{{ name }}</button>
@@ -147,6 +141,6 @@ onMounted(() => {
     </div>
   </div>
  
-
+  
  <Footer />
 </template>

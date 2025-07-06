@@ -3,6 +3,7 @@ import Header from '@/Layouts/Header.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Footer from '@/Layouts/Footer.vue';
 import { router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 
 defineProps({
   categories: Array
@@ -16,6 +17,7 @@ const TakeExamination = (cat, catID) => {
 </script>
 
 <template>
+    <Head title="Exam" />
     <Header></Header>
     <div class="min-h-screen">
         <div><p>Select a category to boost your confidence and exam readiness.</p></div>

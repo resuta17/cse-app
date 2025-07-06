@@ -6,25 +6,28 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Question;
 use App\Models\Category;
+ 
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
+Route::get('/login', function () {
+    return Inertia::render('Login');
+});
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
+Route::get('/dashboard', function () {
+    $categoriesWithCount = Category::withCount('questions')->get();
+
+    return Inertia::render('Dashboard', ['categoriesWithCount' => $categoriesWithCount]);
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/admin', function () {
+    return Inertia::render('Admin');
+})->middleware(['auth', 'verified'])->name('admin');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 Route::get('/', fn() => Inertia::render('Home'))->name('home');
 

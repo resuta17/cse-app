@@ -2,7 +2,7 @@
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Header from '@/Layouts/Header.vue';
 import Footer from '@/Layouts/Footer.vue';
-import { router } from '@inertiajs/vue3';
+import { router, Head } from '@inertiajs/vue3';
 
 const goToExam = () => {
   router.visit(route('exam'));
@@ -11,6 +11,7 @@ const goToExam = () => {
 </script>
 
 <template>
+    <Head title="Home" />
     <Header></Header>
     
     <main class="h-screen px-28 py-8 text-black grid grid-cols-2 mt-5
