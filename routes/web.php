@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Question;
 use App\Models\Category;
+use App\Http\Controllers\QuestionController;
  
 
 Route::get('/login', function () {
@@ -15,12 +16,16 @@ Route::get('/login', function () {
 
 Route::get('/dashboard', function () {
     $categoriesWithCount = Category::withCount('questions')->get();
+    $questions = Question::paginate(20);
 
-    return Inertia::render('Dashboard', ['categoriesWithCount' => $categoriesWithCount]);
+    return Inertia::render('Dashboard', ['categoriesWithCount' => $categoriesWithCount, 'questions' =>  $questions]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/admin', function () {
-    return Inertia::render('Admin');
+    $categories = Category::all();
+    return Inertia::render('Admin', [
+        'categories' => $categories
+    ]);
 })->middleware(['auth', 'verified'])->name('admin');
 
 Route::middleware('auth')->group(function () {
@@ -32,15 +37,14 @@ Route::middleware('auth')->group(function () {
 Route::get('/', fn() => Inertia::render('Home'))->name('home');
 
 Route::get('/about', function () {
-    $questions = Question::all(); // You can add pagination or filtering here
-
+    $questions = Question::all(); 
     return Inertia::render('About', [
         'questions' => $questions
     ]);
 })->name('about');
 
 Route::get('/Practice', function () {
-    $categories = Category::all(); // You can add pagination or filtering here
+    $categories = Category::all(); 
 
     return Inertia::render('Exam', [
         'categories' => $categories
@@ -65,6 +69,6 @@ Route::get('/Examination', function () {
      return Inertia::render('Examination', compact('id','name', 'questions'));
 })->name('practice');
 //Route::get('/Practice', fn() => Inertia::render('Exam'))->name('exam');
-
+Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
 
 require __DIR__.'/auth.php';

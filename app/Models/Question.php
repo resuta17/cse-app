@@ -8,6 +8,7 @@ class Question extends Model
 {
     protected $table = 'questions';
     
+    protected $fillable = ['category_id', 'direction', 'question_text'];
     
     public function category()
     {
