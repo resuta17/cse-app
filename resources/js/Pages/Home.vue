@@ -40,8 +40,16 @@ const goToExam = () => {
             </div>     
         </div>            
     </div>
-    <div class="p-4 rounded bg-white shadow-2xl border border-gray-200">
-            
+    <div class="py-10 px-20 rounded bg-white shadow-2xl border border-blue-600 border-l-8">
+        <p class="text-xl font-bold mb-2">Why use CSE Reviewer Hub?</p>
+        <ul>
+            <li>
+                1. It's free without an ads
+            </li>
+            <li>
+                2. You can choose what category to take
+            </li>
+        </ul>
     </div>
     </main>
     

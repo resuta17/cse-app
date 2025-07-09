@@ -29,7 +29,7 @@ const TakeExamination = (cat, catID) => {
             <SecondaryButton>Sub</SecondaryButton>
         </div>
         <div class="flex items-center mt-10 justify-center">
-            <button class="shadow-lg border border-gray-500 px-4 py-2 bg-green-600 text-white rounded-md">Start</button>
+            <!-- <button class="shadow-lg border border-gray-500 px-4 py-2 bg-green-600 text-white rounded-md">Start</button> -->
         </div> 
     </div>
     

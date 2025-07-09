@@ -21,10 +21,31 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', ['categoriesWithCount' => $categoriesWithCount, 'questions' =>  $questions]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/edit', function () {
+    $id = request('id');
+    $categories = Category::all();
+    $question = Question::with(['category', 'choices'])->findOrFail($id);
+    return Inertia::render('Admin', [
+        'question' => $question,
+        'categories' => $categories
+    ]);
+})->middleware(['auth', 'verified'])->name('question');
+
+
 Route::get('/admin', function () {
     $categories = Category::all();
+        
+    $emptyQuestion = [
+        'id' => null,
+        'category_id' => '',
+        'direction' => '',
+        'question_text' => '',
+        'choices' => [],
+    ];
+
     return Inertia::render('Admin', [
-        'categories' => $categories
+        'categories' => $categories,
+        'question' => $emptyQuestion
     ]);
 })->middleware(['auth', 'verified'])->name('admin');
 
@@ -70,5 +91,7 @@ Route::get('/Examination', function () {
 })->name('practice');
 //Route::get('/Practice', fn() => Inertia::render('Exam'))->name('exam');
 Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+Route::put('/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
+
 
 require __DIR__.'/auth.php';

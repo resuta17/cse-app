@@ -2,7 +2,7 @@
 import Header from '@/Layouts/Header.vue'
 import Footer from '@/Layouts/Footer.vue'
 import { onMounted, ref, reactive, computed } from 'vue'
-import { router } from '@inertiajs/vue3';
+import { router, Head } from '@inertiajs/vue3';
 
 
 const correctAnswers = ref([])
@@ -58,6 +58,7 @@ onMounted(() => {
 </script>
 
 <template>
+     <Head :title='name' />
   <Header />
 
   <div class="bg-gray-100 h-screen mb-4">

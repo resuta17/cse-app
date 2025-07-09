@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head,Link  } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 
 
 const props = defineProps({
@@ -9,13 +9,16 @@ const props = defineProps({
 
 })
 
-</script>
 
+const OpenQuestion = (catID) => {
+  router.visit(route('question', { id: catID}));
+};
+
+</script>
 
 
 <template>
     <Head title="Dashboard" />
-    {{ CategoriesWithCount }}
     <AuthenticatedLayout>
        
         <div class="py-12">
@@ -36,8 +39,8 @@ const props = defineProps({
                 </thead>
                 <tbody>
                     <tr  v-for="(item, index) in questions.data" :key="item.id">
-                        <td class="border px-4 py-2">{{ index + 1 + questions.from - 1 }}</td>
-                        <td class="border px-4 py-2">{{ item.question_text }}</td>
+                        <td @click="OpenQuestion(item.id)"   class="border px-4 py-2">{{ index + 1 + questions.from - 1 }}</td>
+                        <td @click="OpenQuestion(item.id)" class="border px-4 py-2">{{ item.question_text }}</td>
                     </tr>
                 </tbody>
                 </table>

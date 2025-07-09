@@ -80,14 +80,49 @@ class QuestionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+   public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'direction' => 'nullable|string',
+            'question' => 'required|string',
+            'correctAnswer' => 'required|string',
+            'explanation' => 'nullable|string',
+            'wrongChoices' => 'required|array|min:1',
+            'wrongChoices.*' => 'required|string',
+        ]);
+
+        $question = Question::findOrFail($id);
+
+        // Update the main question record
+        $question->update([
+            'category_id' => $validated['category_id'],
+            'direction' => $validated['direction'],
+            'question_text' => $validated['question'],
+        ]);
+
+        // Delete old choices
+        $question->choices()->delete();
+
+        // Create the correct choice
+        $question->choices()->create([
+            'choice_text' => $validated['correctAnswer'],
+            'is_correct' => true,
+            'explanation' => $validated['explanation'],
+        ]);
+
+        // Create the wrong choices
+        foreach ($validated['wrongChoices'] as $choiceText) {
+            $question->choices()->create([
+                'choice_text' => $choiceText,
+                'is_correct' => false,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Question updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         //
