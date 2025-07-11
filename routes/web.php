@@ -92,6 +92,8 @@ Route::get('/Examination', function () {
 //Route::get('/Practice', fn() => Inertia::render('Exam'))->name('exam');
 Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
 Route::put('/questions/{id}', [QuestionController::class, 'update'])->name('questions.update');
+Route::delete('/questions/{id}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+
 
 
 require __DIR__.'/auth.php';

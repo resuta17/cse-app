@@ -123,8 +123,15 @@ class QuestionController extends Controller
     }
 
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $question = Question::findOrFail($id);
+
+        $question->choices()->delete();
+
+        $question->delete();
+
+        return redirect('/dashboard')->with('success', 'Question deleted successfully!');
     }
 }
+

@@ -61,6 +61,33 @@ function submit() {
     }
 }
 
+function destroy() {
+    if (props.question.id !== null) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will permanently delete the question.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.delete(route('questions.destroy', props.question.id), {
+                    onSuccess: () => {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Question deleted successfully.',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                        })
+                    },
+                });
+            }
+        });
+    }
+}
+
+
 </script>
 
 
@@ -71,7 +98,7 @@ function submit() {
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="p-8 bg-white border border-gray-100 shadow-md">
-                    <p class="text-center text-xl font-bold mb-4"> {{crud}} Question </p>
+                    <p class="text-center text-xl font-bold mb-4"> {{ crud }} Question </p>
                     <p>Category</p>
                     <select
                     v-model="form.category_id"
@@ -100,8 +127,9 @@ function submit() {
                     <input v-model="form.wrongChoices[1]" placeholder="Wrong answer No. 2" class="w-full border p-2 border-gray-300 rounded-md	mb-2" />
                     <input v-model="form.wrongChoices[2]" placeholder="Wrong answer No. 3" class="w-full border p-2 border-gray-300 rounded-md	mb-2" />
                     <input v-model="form.wrongChoices[3]" placeholder="Wrong answer No. 4" class="w-full border p-2 border-gray-300 rounded-md	mb-2" />
-                    <div class="flex justify-end mt-4">
-                        <button @click="submit()" class="bg-green-500 border rounded-lg border-white py-1 px-4 shadow-xl text-white">{{crud}}</button>
+                    <div class="mt-4 space-x-2" :class="props.question.id !== null ? 'flex justify-between' : 'flex justify-end'">
+                        <button @click="destroy()" v-if="props.question.id !== null" class="bg-red-500 border rounded-lg border-white py-1 px-4 shadow-xl text-white"> Delete </button>
+                        <button @click="submit()" class="bg-green-500 border rounded-lg border-white py-1 px-4 shadow-xl text-white"> {{ crud }} </button>
                     </div>
                     
                 </div>

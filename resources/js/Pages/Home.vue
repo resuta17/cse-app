@@ -44,10 +44,13 @@ const goToExam = () => {
         <p class="text-xl font-bold mb-2">Why use CSE Reviewer Hub?</p>
         <ul>
             <li>
-                1. It's free without an ads
+                1. 100% free — no ads at all
             </li>
             <li>
-                2. You can choose what category to take
+                2. Pick the category you want to practice
+            </li>
+            <li>
+                3. It helps boost your confidence
             </li>
         </ul>
     </div>
