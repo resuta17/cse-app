@@ -134,8 +134,8 @@ onMounted(() => {
                 <p class="mt-4 text-sm text-gray-500 italic">
                   Keep practicing to improve your {{ name.toLowerCase() }} skills!
                 </p>
-                <div class="mt-4">
-                    <button @click="TakeExamination( name ,id)">{{ name }}</button>
+                <div class="mt-8 flex justify-center">
+                    <button class="border px-2 rounded-md bg-gray-300 shadow-md" @click="TakeExamination( name ,id)"> Retake </button>
                 </div>
             </div>
        </div>

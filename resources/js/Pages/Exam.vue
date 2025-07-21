@@ -19,19 +19,32 @@ const TakeExamination = (cat, catID) => {
 <template>
     <Head title="Exam" />
     <Header></Header>
-    <div class="min-h-screen">
-        <div><p>Select a category to boost your confidence and exam readiness.</p></div>
-        <div  class="flex items-center mt-20 justify-center space-x-2">
-            <SecondaryButton v-for="category in categories" @click="TakeExamination( category.name ,category.id)">{{ category.name }}</SecondaryButton>
+    <div class="min-h-screen flex justify-center items-center">
+        <div class="border p-10 w-full max-w-4xl text-center bg-blue-200 border-black rounded-lg">
+            <div>
+                <p class="text-lg font-medium">Select a category to boost your confidence and exam readiness.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center items-center mt-10 gap-2">
+                <SecondaryButton
+                    v-for="category in categories"
+                    :key="category.id"
+                    @click="TakeExamination(category.name, category.id)"
+                >
+                    {{ category.name }}
+                </SecondaryButton>
+            </div>
+             <div>
+                <p class="text-lg font-medium mt-5">Select a mock up.</p>
+            </div>
+
+            <div class="flex justify-center items-center mt-5 gap-2">
+                <SecondaryButton>Prof</SecondaryButton>
+                <SecondaryButton>Sub</SecondaryButton>
+            </div>
         </div>
-        <div class="flex items-center mt-5 justify-center space-x-2">
-            <SecondaryButton>Prof</SecondaryButton>
-            <SecondaryButton>Sub</SecondaryButton>
-        </div>
-        <div class="flex items-center mt-10 justify-center">
-            <!-- <button class="shadow-lg border border-gray-500 px-4 py-2 bg-green-600 text-white rounded-md">Start</button> -->
-        </div> 
     </div>
+
     
     <Footer></Footer>
     
