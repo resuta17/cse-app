@@ -5,7 +5,7 @@ import Footer from '@/Layouts/Footer.vue';
 
 <template>
         <Header />
-        <div class="m-20">
+        <div class="m-20 h-screen">
             <h2 class="text-2xl font-bold mb-4 mt-4">What is CSE?</h2>
             <p class="mb-4">
                 <strong>CSE</strong> stands for <strong>Civil Service Examination</strong>. It is a nationwide exam conducted by the 
