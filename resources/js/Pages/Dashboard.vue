@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
+import { ref, watch } from 'vue'
 
 
 const props = defineProps({
@@ -9,10 +10,30 @@ const props = defineProps({
 
 })
 
+const selectedOption = ref('');
+
 
 const OpenQuestion = (catID) => {
   router.visit(route('question', { id: catID}));
 };
+
+watch(selectedOption, (newVal) => {
+  if (newVal) {
+    router.visit(route('dashboard.category', { id: newVal }), {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['questions', 'selectedCategory'],
+    });
+  } else {
+    router.visit(route('dashboard'), {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['questions', 'selectedCategory'],
+    });
+  }
+});
+
+
 
 </script>
 
@@ -20,7 +41,6 @@ const OpenQuestion = (catID) => {
 <template>
     <Head title="Dashboard" />
     <AuthenticatedLayout>
-       
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                <p class="text-lg mb-4 ">Number of Questions per Category.</p>
@@ -32,6 +52,22 @@ const OpenQuestion = (catID) => {
                </div>
                <div class="p-4 bg-white mt-10 rounded-xl shadow-xl border border-gray-200">
                     <p class="text-center text-xl font-semibold">List of Questions</p>
+                    <div class="flex items-center justify-end space-x-2" >
+                        <p>
+                            Category: 
+                        </p>
+                        <select v-model="selectedOption" class="border px-2 py-1 rounded" >
+                            <option disabled value="">Please select an option</option>
+                            <option 
+                                v-for="category in categoriesWithCount"
+                                :value="category.id"
+                                :key="category.id">
+                                {{ category.name }}
+                            </option>
+                        </select>
+                            
+                    </div>
+
                     <table class="table-auto border-collapse border border-gray-300 w-full mt-10">
                         <thead>
                             <tr>
@@ -41,7 +77,7 @@ const OpenQuestion = (catID) => {
                         </thead>
                         <tbody>
                             <tr  v-for="(item, index) in questions.data" :key="item.id">
-                                <td @click="OpenQuestion(item.id)"   class="border px-4 py-2 cursor-pointer">{{ index + 1 + questions.from - 1 }}</td>
+                                <td @click="OpenQuestion(item.id)"   class="border px-4 py-2 cursor-pointer">{{ index + 1 }}</td>
                                 <td @click="OpenQuestion(item.id)" class="border px-4 py-2 cursor-pointer">{{ item.question_text }}</td>
                             </tr>
                         </tbody>

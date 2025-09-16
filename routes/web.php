@@ -18,8 +18,24 @@ Route::get('/dashboard', function () {
     $categoriesWithCount = Category::withCount('questions')->get();
     $questions = Question::paginate(20);
 
-    return Inertia::render('Dashboard', ['categoriesWithCount' => $categoriesWithCount, 'questions' =>  $questions]);
+    return Inertia::render('Dashboard', [
+        'categoriesWithCount' => $categoriesWithCount,
+        'questions' => $questions,
+        'selectedCategory' => null,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard/category/{id}', function ($id) {
+    $categoriesWithCount = Category::withCount('questions')->get();
+
+    // Filtered questions (no pagination, or use ->paginate if needed)
+    $questions = Question::where('category_id', $id)->paginate(20);
+
+    return Inertia::render('Dashboard', [
+        'categoriesWithCount' => $categoriesWithCount,
+        'questions' => $questions
+    ]);
+})->middleware(['auth', 'verified'])->name('dashboard.category');
 
 Route::get('/edit', function () {
     $id = request('id');
